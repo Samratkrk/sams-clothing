@@ -1,0 +1,13 @@
+.categories-container {
+  background-color: red;
+  padding: 25px;
+}
+
+.categories-container .category-container {
+  background-color: green;
+}
+
+.categories-container .category-body-container {
+  background-color: gray;
+}
+/*# sourceMappingURL=categories.styles.css.map */
