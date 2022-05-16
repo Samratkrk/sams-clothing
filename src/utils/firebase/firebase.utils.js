@@ -10,7 +10,6 @@ import {
   doc,
   getDoc,
   setDoc,
-  refEqual,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -32,14 +31,19 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
-provider.setCustomParameters({
+googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+//popup
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+  //redirect
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 
 //This is the database that we are going to pass
 export const db = getFirestore();
