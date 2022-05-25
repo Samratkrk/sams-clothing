@@ -1,4 +1,7 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useReducer } from "react";
+
+import { createAction } from "../utils/reducer/reducer.utils";
+
 import {
   createUserDocumentFromAuth,
   onAuthStateChangedListener,
@@ -10,18 +13,34 @@ export const UserContext = createContext({
   setCurrentUser: () => null,
 });
 
-//a Provider is an actual component
-//For every context built, there is a ".Provier".
-// ".Provider" will wrap around any component that needs value.
+export const USER_ACTION_TYPES = {
+  SET_CURRENT_USER: "SET_CURRENT_USER",
+};
 
-/* 
-Obsereve <UserProvider> <App /> </UserProvider>
-above the <App/> will become the UserProvider 's {children} 
+const userReducer = (state, action) => {
+  const { type, payload } = action;
 
-We also need to pass the value={value} ,which will be an actual value of our createContext();
-*/
+  switch (type) {
+    case USER_ACTION_TYPES.SET_CURRENT_USER:
+      return {
+        ...state,
+        currentUser: payload,
+      };
+    default:
+      throw new Error(`Unhandled type ${type} in userReducer`);
+  }
+};
+
+const INITIAL_STATE = {
+  currentUser: null,
+};
+
 export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [{ currentUser }, dispatch] = useReducer(userReducer, INITIAL_STATE);
+
+  const setCurrentUser = (user) => {
+    dispatch(createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user));
+  };
 
   //generating the actual value to pass to the provider.
   const value = { currentUser, setCurrentUser };
